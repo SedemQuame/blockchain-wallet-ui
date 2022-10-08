@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.parent {
+  height: 300px !important;
+  overflow: hidden;
+}
+
+.chartContainer {
+  width: 100px;
+  height: 100px;
+  max-width: 120px;
+}
