@@ -1,0 +1,7 @@
+{
+  "name": "agmanwani btc wallet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
