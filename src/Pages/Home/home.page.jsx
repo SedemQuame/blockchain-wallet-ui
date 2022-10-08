@@ -4,6 +4,15 @@ import { useNavigate } from "react-router-dom";
 import BTCLogo from "./../../Assets/images/BTC.png";
 import ETHLogo from "./../../Assets/images/ETH.png";
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Graph } from 'react-crypto-graph';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('root');
+  ReactDOM.render(<h1>Test <Graph/></h1>, root);
+});
+
 function Home() {
   let navigate = useNavigate();
 
@@ -44,6 +53,25 @@ function Home() {
             </table>
           </div>
         </div>
+      </div>
+      <div>
+      <div class="flex justify-between p-1 m-1">
+        <div>Holdings</div>
+        <div>View Prices</div>
+    </div>
+    <div class="grid grid-col-1 divide-y">
+        <div class="flex justify-between p-1 m-1 wallets">
+            <div><img src="assets/img/bitcoin.png" alt=""></img></div>
+            <div>
+                <div class="text-right">US$0.00</div>
+                <div class="text-right">0BTC</div>
+            </div>
+        </div>
+        <div class="flex justify-between p-1 m-1">
+            <div>bitcoin</div>
+            <div>prices</div>
+        </div>
+    </div>
       </div>
     </>
   );
