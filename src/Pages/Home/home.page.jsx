@@ -5,14 +5,7 @@ import BTCLogo from "./../../Assets/images/BTC.png";
 
 import { UserContext, UserProvider } from "./../../Context/auth.context";
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Graph } from 'react-crypto-graph';
-
-document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('root');
-  ReactDOM.render(<h1>Test <Graph/></h1>, root);
-});
+import TradeViewChart from 'react-crypto-chart';
 
 function Home() {
   let navigate = useNavigate();
@@ -55,12 +48,12 @@ function Home() {
           </div>
         </div>
       </div>
-      <div>
-      <div class="flex justify-between p-1 m-1">
+      {/* <div class=".text-center">
+    <div class="flex justify-between p-1 m-1">
         <div>Holdings</div>
         <div>View Prices</div>
     </div>
-    <div class="grid grid-col-1 divide-y">
+    <div class="">
         <div class="flex justify-between p-1 m-1 wallets">
             <div><img src="assets/img/bitcoin.png" alt=""></img></div>
             <div>
@@ -73,7 +66,37 @@ function Home() {
             <div>prices</div>
         </div>
     </div>
+
+      </div> */}
+
+      <div class="d-flex align-items-center flex-column m-5">
+        <div class="d-flex justify-content-center">
+          <div></div>
+          <div>Bitcoin (BTC)</div>
+          <div></div>
+
+        </div>
+        <div class="mr-auto">US$19,176.65</div>
+        <div>-$102.45(0.56)%</div>
+        <div class="graph mt-3">
+        <h3>BTC/USDT</h3>
+        <div className="parent">
+        <TradeViewChart
+        containerStyle={{
+          minHeight: '300px',
+          minWidth: '400px',
+          marginBottom: '30px',
+        }}
+        pair="BTCUSDT"
+      />
+        </div>
+      
+      {/* <TradeViewChart 
+      class="w-75 h-50"
+      pair="BTCBUSD" />; */}
+        </div>
       </div>
+
     </>
   );
 }
