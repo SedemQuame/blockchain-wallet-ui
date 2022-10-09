@@ -36,16 +36,23 @@ function Signup() {
       redirect: "follow",
     };
 
-    fetch("https://btc-wallet-app.herokuapp.com/register", requestOptions)
+    fetch(`https://btc-wallet-app.herokuapp.com/register`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        // save to the context.
-        // alert("Account created successfully. Please proceed to login");
 
-        // hide the modal
+        if (result.length === 3) {
+          alert(result[1].message);
+        } else {
+          if (result.success) {
+            // hide the modal
+            alert("Account created successfully. Please proceed to login");
+            navigate(`/login`);
+          } else {
+            alert(result.message);
+          }
+        }
         setLoadingModalIsOpen(false);
-
-        navigate(`/login`);
+        return;
       })
       .catch((error) => console.log("error", error));
   };
@@ -54,10 +61,10 @@ function Signup() {
     <>
       <div
         className="row d-flex justify-content-center align-items-center bg-light"
-        style={{ height: "90vh" }}
+        style={{ height: "95vh" }}
       >
         <div className="col-12 col-md-6 col-lg-4 ">
-          <div className="card">
+          <div className="card m-2">
             <div className="card-body">
               <form onSubmit={(e) => handleSubmit(e)}>
                 <h5 className="card-title text-center">Signup</h5>

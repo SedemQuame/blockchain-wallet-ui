@@ -213,7 +213,7 @@ export default function BrowseJobs(props) {
             </div>
           </div>
 
-          <p className="">
+          <p>
             Need more search options?
             <Link className="text-success" to="/advanced-search">
               Advanced Search
@@ -395,7 +395,7 @@ export default function BrowseJobs(props) {
           </div>
         </div>
 
-        <div className="">
+        <div>
           {jobs.map((job) => (
             <Link
               className="text-decoration-none text-black"

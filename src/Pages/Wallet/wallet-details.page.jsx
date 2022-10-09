@@ -7,12 +7,27 @@ import Empty from "./../../Assets/images/empty.png";
 import { Link } from "react-router-dom";
 import SendBTCModal from "../../Components/Transactions/send-modal.component";
 import ReceiveBTCModal from "../../Components/Transactions/receive-modal.component";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import StatusOfBTCTransactionModal from "../../Components/Transactions/state-modal.component";
+
+function WalletAttributes(props) {
+  return (
+    <>
+      {props.attribute}
+      <span
+        style={{ fontSize: "12px" }}
+        className="text-muted text-wrap float-end"
+      >
+        {props.value}
+      </span>
+    </>
+  );
+}
 
 export default function WalletDetailsPage() {
   const { walletAddress } = useParams();
-
   const [data, setData] = useState();
+  const [openSendBtcModal, setOpenSendBtcModal] = useState(false);
+  const [transactionState, setTransactionStateData] = useState();
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -36,331 +51,185 @@ export default function WalletDetailsPage() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        console.log(result.data.txs);
         setData(result.data);
       })
       .catch((error) => console.log("error", error));
   }, []);
 
-  let txs = [
-    {
-      txid: "1110dc15bb8a1aa59269422bee06da00d9d8b0e1dc6b325595bb68b1744a4b68",
-      block_no: 2349822,
-      confirmations: 9,
-      time: 1665220228,
-      outgoing: {
-        value: "0.01640432",
-        outputs: [
-          {
-            output_no: 0,
-            address: "moamcWFGyxnnoe3a6DGiYfPBF1QBuzF3N9",
-            value: "0.00006000",
-            spent: null,
-          },
-          {
-            output_no: 1,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            value: "0.01621643",
-            spent: null,
-          },
-        ],
-      },
-      incoming: {
-        output_no: 1,
-        value: "0.01621643",
-        spent: null,
-        inputs: [
-          {
-            input_no: 0,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            received_from: {
-              txid: "8669caffdeae2a9c8a094653d5cc856ab7ee9f39dbf132e6db2331c3aea4bc12",
-              output_no: 1,
-            },
-          },
-          {
-            input_no: 1,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            received_from: {
-              txid: "2a1d0bbd24c20908ddfba12c9e75d235a3adf4072659ffc8b7219c5b3926aaff",
-              output_no: 1,
-            },
-          },
-        ],
-        req_sigs: null,
-        script_asm:
-          "OP_DUP OP_HASH160 6989aef19f04b5234287b5ca772580a2a927851b OP_EQUALVERIFY OP_CHECKSIG",
-        script_hex: "76a9146989aef19f04b5234287b5ca772580a2a927851b88ac",
-      },
-    },
-    {
-      txid: "2a1d0bbd24c20908ddfba12c9e75d235a3adf4072659ffc8b7219c5b3926aaff",
-      block_no: 2349821,
-      confirmations: 10,
-      time: 1665219974,
-      incoming: {
-        output_no: 1,
-        value: "0.01639221",
-        spent: {
-          txid: "1110dc15bb8a1aa59269422bee06da00d9d8b0e1dc6b325595bb68b1744a4b68",
-          input_no: 1,
-        },
-        inputs: [
-          {
-            input_no: 0,
-            address: "mgxS9ZPn1TFDa8hxFD5FZquPsNMVXUxfMp",
-            received_from: {
-              txid: "e293e64100808adfc7fb47d330e91f109f1b78fd1eb8e5215d47dc47b4357436",
-              output_no: 1,
-            },
-          },
-        ],
-        req_sigs: null,
-        script_asm:
-          "OP_DUP OP_HASH160 6989aef19f04b5234287b5ca772580a2a927851b OP_EQUALVERIFY OP_CHECKSIG",
-        script_hex: "76a9146989aef19f04b5234287b5ca772580a2a927851b88ac",
-      },
-    },
-    {
-      txid: "8669caffdeae2a9c8a094653d5cc856ab7ee9f39dbf132e6db2331c3aea4bc12",
-      block_no: 2349819,
-      confirmations: 12,
-      time: 1665218694,
-      outgoing: {
-        value: "0.00020000",
-        outputs: [
-          {
-            output_no: 0,
-            address: "mnJJCCLa8FEpVFKoCeE2BUQWKaT6rWUGWV",
-            value: "0.00006000",
-            spent: null,
-          },
-          {
-            output_no: 1,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            value: "0.00001211",
-            spent: {
-              txid: "1110dc15bb8a1aa59269422bee06da00d9d8b0e1dc6b325595bb68b1744a4b68",
-              input_no: 0,
-            },
-          },
-        ],
-      },
-      incoming: {
-        output_no: 1,
-        value: "0.00001211",
-        spent: {
-          txid: "1110dc15bb8a1aa59269422bee06da00d9d8b0e1dc6b325595bb68b1744a4b68",
-          input_no: 0,
-        },
-        inputs: [
-          {
-            input_no: 0,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            received_from: {
-              txid: "fee3b1d775290ea4b051174a6e92b0716f421ed3ba6e596ca9ba32cf41ffbf56",
-              output_no: 0,
-            },
-          },
-          {
-            input_no: 1,
-            address: "mq8zBc2iY7US8udeKrfB5Sexr3jsNmc5JV",
-            received_from: {
-              txid: "fe1d6046033f3e233fcdd13300b5e9408e8915a7a339b5c71168cb3acf3c50cd",
-              output_no: 1,
-            },
-          },
-        ],
-        req_sigs: null,
-        script_asm:
-          "OP_DUP OP_HASH160 6989aef19f04b5234287b5ca772580a2a927851b OP_EQUALVERIFY OP_CHECKSIG",
-        script_hex: "76a9146989aef19f04b5234287b5ca772580a2a927851b88ac",
-      },
-    },
-    {
-      txid: "fe1d6046033f3e233fcdd13300b5e9408e8915a7a339b5c71168cb3acf3c50cd",
-      block_no: 2349626,
-      confirmations: 205,
-      time: 1665074405,
-      incoming: {
-        output_no: 1,
-        value: "0.00010000",
-        spent: {
-          txid: "8669caffdeae2a9c8a094653d5cc856ab7ee9f39dbf132e6db2331c3aea4bc12",
-          input_no: 1,
-        },
-        inputs: [
-          {
-            input_no: 0,
-            address: "tb1qd58l4568vudgd032p7rl8htmzt0esqs2z4ne2l",
-            received_from: {
-              txid: "fee3b1d775290ea4b051174a6e92b0716f421ed3ba6e596ca9ba32cf41ffbf56",
-              output_no: 1,
-            },
-          },
-        ],
-        req_sigs: null,
-        script_asm:
-          "OP_DUP OP_HASH160 6989aef19f04b5234287b5ca772580a2a927851b OP_EQUALVERIFY OP_CHECKSIG",
-        script_hex: "76a9146989aef19f04b5234287b5ca772580a2a927851b88ac",
-      },
-    },
-    {
-      txid: "fee3b1d775290ea4b051174a6e92b0716f421ed3ba6e596ca9ba32cf41ffbf56",
-      block_no: 2349626,
-      confirmations: 205,
-      time: 1665074378,
-      incoming: {
-        output_no: 0,
-        value: "0.00010000",
-        spent: {
-          txid: "8669caffdeae2a9c8a094653d5cc856ab7ee9f39dbf132e6db2331c3aea4bc12",
-          input_no: 0,
-        },
-        inputs: [
-          {
-            input_no: 0,
-            address: "tb1qf7fc7gp0sk4dhu2xk3kl0gz7ykh9zx2tc9c0le",
-            received_from: {
-              txid: "921a417389e22a8a8376a653c81faa602ecacd1b88260223530d5e8b113f2cc7",
-              output_no: 0,
-            },
-          },
-        ],
-        req_sigs: null,
-        script_asm:
-          "OP_DUP OP_HASH160 6989aef19f04b5234287b5ca772580a2a927851b OP_EQUALVERIFY OP_CHECKSIG",
-        script_hex: "76a9146989aef19f04b5234287b5ca772580a2a927851b88ac",
-      },
-    },
-  ];
-
   return (
     <>
-      <div className="container">
+      <div style={{ overflow: "scroll" }}>
         {data ? (
-          <div className="col-12 d-grid mt-3 gap-3">
+          <div
+            className="d-grid container gap-5 pt-3"
+            style={{ width: "100%" }}
+          >
             <div>
-              <h3>Wallet Details</h3>
-              <div className="d-flex gap-3">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-mdb-toggle="modal"
-                  data-mdb-target="#sendBTCModal"
-                >
-                  Send Crypto
-                </button>
+              <h5>Wallet Details & Transactions</h5>
+              <hr />
+              <p>
+                Wallet Details
+                <br />
+                <small>List of all important wallet details</small>
+              </p>
 
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  data-mdb-toggle="modal"
-                  data-mdb-target="#receiveBTCModal"
-                >
-                  Receive Crypto
-                </button>
-              </div>
-              <SendBTCModal userAddress={walletAddress} />
-              <ReceiveBTCModal userAddress={walletAddress} />
+              <ul className="list-group">
+                <li className="list-group-item p-2">
+                  <WalletAttributes
+                    attribute="Address"
+                    value={data && data.address}
+                  />
+                </li>
+                <li className="list-group-item p-2">
+                  <WalletAttributes
+                    attribute="Network"
+                    value={data && data.network}
+                  />
+                </li>
+                <li className="list-group-item p-2">
+                  <WalletAttributes
+                    attribute="Pending"
+                    value={data && data.received_value}
+                  />
+                </li>
+                <li className="list-group-item p-2">
+                  <WalletAttributes
+                    attribute="Received"
+                    value={data && data.received_value}
+                  />
+                </li>
+                <li className="list-group-item p-2">
+                  <WalletAttributes
+                    attribute="Number of Transactions"
+                    value={data && data.total_txs}
+                  />
+                </li>
+              </ul>
             </div>
 
-            <div className="card">
-              <h5 className="card-header bg-black text-white">Wallet</h5>
-              <div className="table-responsive">
-                <table className="table-striped table-sm table">
-                  <tbody>
-                    <tr>
-                      <th>Address</th>
-                      <td className="text-muted text-wrap text-right">
-                        {data && data.address}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Network</th>
-                      <td className="text-muted text-right">
-                        {data && data.network}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Balance</th>
-                      <td className="text-muted text-right">
-                        {data && data.balance}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Pending</th>
-                      <td className="text-muted text-right">
-                        {data && data.received_value}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Received</th>
-                      <td className="text-muted text-right">
-                        {data && data.pending_value}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Number of Transactions</th>
-                      <td className="text-muted text-right">
-                        {data && data.total_txs}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <div>
+              <p>
+                Transactions
+                <br />
+                <small>
+                  List of all transactions performed with this wallet.
+                </small>
+              </p>
 
-            <div className="card">
-              <h5 className="card-header bg-black text-white">Transactions</h5>
-              <div className="card-body p-0">
-                <div className="table-responsive">
-                  <table className="mb-0 table bg-white align-middle">
-                    <tbody>
-                      {txs.map((txs) => (
-                        <tr>
-                          <td>
-                            <Link
-                              to={{
-                                pathname: `https://sochain.com/tx/BTCTEST/${txs.txid}`,
-                              }}
-                            >
-                              {txs.txid}
-                            </Link>
-                          </td>
-                          <td>{txs.block_no}</td>
-                          <td>{txs.confirmations}</td>
-                          <td>
-                            <span className="badge badge-success rounded-pill d-inline">
-                              Active
-                            </span>
-                          </td>
-                          <td>{txs.time}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              <div className="d-grid gap-3">
+                <div className="d-flex justify-content-between gap-3">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => setOpenSendBtcModal(true)}
+                  >
+                    Send Crypto
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-mdb-toggle="modal"
+                    data-mdb-target="#receiveBTCModal"
+                  >
+                    Receive Crypto
+                  </button>
+                </div>
+
+                <div className="card border p-3">
+                  {data.txs.length > 0 ? (
+                    <>
+                      <div className="row">
+                        {data.txs.map((txs, index) => (
+                          <ul className="col-12 col-md-4 list-group mb-3">
+                            <li className="list-group-item p-2">
+                              <WalletAttributes
+                                attribute="Block Number"
+                                value={txs.block_no}
+                              />
+                            </li>
+                            <li className="list-group-item p-2">
+                              <WalletAttributes
+                                attribute="Confirmation"
+                                value={txs.confirmations}
+                              />
+                            </li>
+                            <li className="list-group-item p-2">
+                              <WalletAttributes
+                                attribute="Time"
+                                value={txs.time}
+                              />
+                            </li>
+                            <li className="list-group-item p-2">
+                              <WalletAttributes
+                                attribute="Transaction Number"
+                                value={index + 1}
+                              />
+                            </li>
+                            <li className="list-group-item p-2">
+                              <WalletAttributes
+                                attribute={
+                                  <Link
+                                    to={{
+                                      pathname: `https://sochain.com/tx/BTCTEST/${txs.txid}`,
+                                    }}
+                                  >
+                                    {txs.txid}
+                                  </Link>
+                                }
+                              />
+                            </li>
+                          </ul>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{ height: "40vh" }}
+                      >
+                        <div className="text-center">
+                          <img
+                            src={Empty}
+                            alt="no-transactions"
+                            style={{ width: "100px", height: "100px" }}
+                          />
+                          <br />
+                          <p>There are not transactions on this wallet.</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <div
-            className="d-flex justify-content-center align-items-center text-center"
-            style={{ height: "80vh" }}
-          >
-            <div className="col-12 col-md-6">
-              <img
-                src={Empty}
-                alt="empty-wallet-list"
-                style={{ width: "100px", height: "100px" }}
-              />
-              <h5 className="card-title">Loading.</h5>
-              <p className="card-text">Looking for wallet details.</p>
+          <>
+            {/* add loading spinner here */}
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ height: "80vh" }}
+            >
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
+
+      <SendBTCModal
+        openSendBtcModal={openSendBtcModal}
+        setOpenSendBtcModal={setOpenSendBtcModal}
+        setTransactionStateData={setTransactionStateData}
+        userAddress={walletAddress}
+        privateKey={``}
+      />
+      <ReceiveBTCModal userAddress={walletAddress} />
+      {/* <StatusOfBTCTransactionModal transactionState={transactionState} /> */}
     </>
   );
 }

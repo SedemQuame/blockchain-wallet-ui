@@ -9,6 +9,7 @@ import WalletDetails from "./Pages/Wallet/wallet-details.page";
 import ForgotPassword from "./Pages/Auth/forgot-passord.page";
 import { UserContext, UserProvider } from "./Context/auth.context";
 
+
 function App() {
   return (
     <>

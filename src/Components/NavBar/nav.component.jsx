@@ -1,67 +1,75 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import ProjectLogo from "./../../Assets/images/logo.jpg";
-// import { UserContext } from "./../../Context/auth.context";
+import { UserContext } from "./../../Context/auth.context";
+import {
+  Collapse,
+  Navbar,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+} from "reactstrap";
 
 const NavBar = (props) => {
-  // const { userId, setUserId } = useContext(UserContext);
+  // use context
+  const { user } = useContext(UserContext);
+
+  // Collapse isOpen State
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-mdb-toggle="collapse"
-            data-mdb-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <i className="fas fa-bars"></i>
-          </button>
+      <Navbar color="light" light expand="md">
+        <NavbarBrand href="/" className="text-center">
+          <img
+            src={ProjectLogo}
+            alt="project-logo"
+            style={{ width: "45px", height: "45px" }}
+          />
+          AMANGWANI
+        </NavbarBrand>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
 
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <Link className="navbar-brand mt-lg-0 mt-2" href="#">
-              <img
-                src={ProjectLogo}
-                style={{ width: "30px", height: "30px" }}
-                alt="MDB Logo"
-                loading="lazy"
-              />
-            </Link>
+        <Collapse isOpen={isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+            <NavItem>
+              <NavLink className="nav-link" href="/home">
+                Home
+              </NavLink>
+            </NavItem>
 
-            <ul className="navbar-nav me-auto mb-lg-0 mb-2">
-              <li className="nav-item">
-                <Link className="nav-link" to="/home">
-                  Home
-                </Link>
-              </li>
-              {true ? (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/wallet-list">
-                    Wallets
-                  </Link>
-                </li>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/">
-                      Sign up
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/login">
-                      Login
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
-        </div>
-      </nav>
+            {user.token && user.message ? (
+              <NavItem>
+                <NavLink className="nav-link" href="/wallet-list">
+                  Wallets
+                </NavLink>
+              </NavItem>
+            ) : (
+              <>
+                <NavItem>
+                  <NavLink className="nav-link" href="/">
+                    Sign up
+                  </NavLink>
+                </NavItem>
+
+                <NavItem>
+                  <NavLink className="nav-link" href="/login">
+                    Login
+                  </NavLink>
+                </NavItem>
+              </>
+            )}
+          </Nav>
+        </Collapse>
+      </Navbar>
     </>
   );
 };

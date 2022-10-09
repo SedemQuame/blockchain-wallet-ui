@@ -11,9 +11,9 @@ function JobDetailSection(props) {
             className="img-fluid rounded-start d-flex align-items-center"
             alt="company-logo"
           />
-          <div className="py-3 d-flex flex-column">
+          <div className="d-flex flex-column py-3">
             <h2 className="job-detail-section-title display-4">{props.name}</h2>
-            <small className="">{props.company}</small>
+            <small>{props.company}</small>
           </div>
         </div>
       </div>

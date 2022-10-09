@@ -38,14 +38,19 @@ function Login() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        // store this in the user context
-        setUser(result);
 
         // hide the modal
         setLoadingModalIsOpen(false);
 
-        // navigate to /home
-        navigate(`/home`);
+        // store this in the user context
+        if (result.success) {
+          setUser(result);
+
+          // navigate to /home
+          navigate(`/home`);
+        } else {
+          alert(result.message);
+        }
       })
       .catch((error) => console.log("error", error));
   };
@@ -53,10 +58,10 @@ function Login() {
   return (
     <div
       className="row d-flex justify-content-center align-items-center bg-light"
-      style={{ height: "90vh" }}
+      style={{ height: "95vh" }}
     >
       <div className="col-12 col-md-8 col-lg-5">
-        <div className="card">
+        <div className="card m-2">
           <div className="card-body">
             <h5 className="card-title text-center">Login</h5>
             <p className="card-text text-center">
@@ -96,7 +101,10 @@ function Login() {
                 Login
               </button>
 
-              <LoadingModal isOpen={loadingModalIsOpen} text={"Logging into account."} />
+              <LoadingModal
+                isOpen={loadingModalIsOpen}
+                text={"Logging into account."}
+              />
 
               <div className="row mt-3">
                 <div className="col">
