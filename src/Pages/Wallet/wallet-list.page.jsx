@@ -40,6 +40,7 @@ export default function WalletListPage() {
         .then((result) => {
           setWallets(result.userWallets);
           setHasWalletData(result.success);
+          console.log(result);
         })
         .catch((error) => console.log("error", error));
     }
@@ -75,121 +76,127 @@ export default function WalletListPage() {
       .then((result) => {
         // hide the modal
         setLoadingModalIsOpen(false);
+
+        console.log(result);
         // setWalletCreationSuccess(result.success);
       })
       .catch((error) => console.log("error", error));
   };
 
+  // Toggle for Modal
+  const toggle = () => setOpenCreateWalletModal(!openCreateWalletModal);
+
   return (
     <>
-      <div className="container-fluid d-grid gap-3">
-        <div className="mt-3">
-          <h5 className="card-title text-center">My Wallets</h5>
-          <p className="card-text text-center">
-            Create and manage multiple BTC wallets from one dashboard.
-          </p>
+      <div className="d-grid container gap-3 pt-3">
+        <div>
+          <h5 className="">My Wallets</h5>
+          <p>Create and manage multiple BTC wallets from one dashboard.</p>
+          <hr />
+          {wallets && wallets.length > 0 ? (
+            <button
+              type="button"
+              className="btn btn-primary float-end"
+              data-mdb-toggle="modal"
+              data-mdb-target="#createWalletModal"
+              onClick={() => setOpenCreateWalletModal(true)}
+            >
+              Create Wallet
+            </button>
+          ) : null}
         </div>
 
-        <div className="card mt-3">
-          <h5 className="card-header bg-black text-white">
-            Wallets
-            {wallets && wallets.length > 0 ? (
-              <button
-                type="button"
-                className="btn btn-primary float-end"
-                data-mdb-toggle="modal"
-                data-mdb-target="#createWalletModal"
-                onClick={() => setOpenCreateWalletModal(true)}
-              >
-                Create Wallet
-              </button>
-            ) : null}
-          </h5>
-          <div className="card-body p-0">
-            {wallets && wallets.length > 0 ? (
-              <div className="">
+        <div>
+          <p>Bitcoin Wallets</p>
+
+          <div className="card border">
+            <div className="card-body p-0">
+              {wallets && wallets.length > 0 ? (
                 <table className="mb-0 table bg-white align-middle">
                   <tbody>
                     {wallets &&
                       wallets.map((wallet) => (
                         <tr
-                          className="p-0"
+                          className=""
                           onClick={() => {
                             navigate(`/wallet-details/${wallet.address}`);
                           }}
                         >
-                          <td className="p-1">
-                            <div className="d-flex align-items-center">
-                              <img
-                                src={BTCLogo}
-                                alt=""
-                                style={{ width: "45px", height: "45px" }}
-                                className="rounded-circle"
-                              />
-                              <div className="p-1">
-                                <p className="fw-bold mb-1">{wallet.name}</p>
-                                <p
-                                  className="text-muted text-wrap mb-0"
-                                  style={{ fontSize: "10px" }}
-                                >
-                                  {wallet.address}
-                                </p>
-                              </div>
+                          <td className="d-flex align-items-center ps-2 gap-2 p-1">
+                            <img
+                              src={BTCLogo}
+                              alt=""
+                              style={{ width: "35px", height: "35px" }}
+                              className="rounded-circle"
+                            />
+                            <div className="d-grid p-1">
+                              <h6 className="text-capitalize mb-0">
+                                {wallet.name || "test name"}
+                              </h6>
+                              <span
+                                className="text-muted text-wrap mb-0"
+                                style={{ fontSize: "10px" }}
+                              >
+                                {wallet.address}
+                              </span>
+                              <span
+                                className="text-muted"
+                                style={{ fontSize: "10px" }}
+                              >
+                                {moment(
+                                  wallet.createdAt,
+                                  "YYYYMMDDHHmmss"
+                                ).fromNow()}
+                              </span>
                             </div>
-                          </td>
-                          <td className="text-muted p-2 text-end">
-                            {moment(
-                              wallet.createdAt,
-                              "YYYYMMDDHHmmss"
-                            ).fromNow()}
                           </td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
-              </div>
-            ) : (
-              <div
-                className="d-flex justify-content-center align-items-center text-center"
-                style={{ height: "80vh" }}
-              >
-                <div className="col-12 col-md-6">
-                  <img
-                    src={Empty}
-                    alt="empty-wallet-list"
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                  <h5 className="card-title">
-                    There are no associated wallet(s).
-                  </h5>
-                  <p className="card-text">
-                    Please create one by clicking the button below.
-                  </p>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    data-mdb-toggle="modal"
-                    data-mdb-target="#createWalletModal"
-                    onClick={() => setOpenCreateWalletModal(true)}
-                  >
-                    Create Wallet
-                  </button>
+              ) : (
+                <div
+                  className="d-flex justify-content-center align-items-center text-center"
+                  style={{ height: "80vh" }}
+                >
+                  <div className="col-12 col-md-6">
+                    <img
+                      src={Empty}
+                      alt="empty-wallet-list"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                    <h5 className="card-title">
+                      There are no associated wallet(s).
+                    </h5>
+                    <p className="card-text">
+                      Please create one by clicking the button below.
+                    </p>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      data-mdb-toggle="modal"
+                      data-mdb-target="#createWalletModal"
+                      onClick={() => setOpenCreateWalletModal(true)}
+                    >
+                      Create Wallet
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/*Create modal */}
 
-      <Modal isOpen={openCreateWalletModal}>
+      <Modal isOpen={openCreateWalletModal} toggle={toggle}>
         <ModalBody>
           {/* Show progress loading here */}
 
           <form onSubmit={(e) => createWallet(e)}>
-            <h5 className="card-title text-center">Create Wallet.</h5>
-            <p className="card-text text-center">
+            <h5 className="card-title">Create Wallet.</h5>
+            <p className="card-text">
               State a name for the wallet you want to create.
             </p>
 

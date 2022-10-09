@@ -96,7 +96,10 @@ function Login() {
                 Login
               </button>
 
-              <LoadingModal isOpen={loadingModalIsOpen} text={"Logging into account."} />
+              <LoadingModal
+                isOpen={loadingModalIsOpen}
+                text={"Logging into account."}
+              />
 
               <div className="row mt-3">
                 <div className="col">

@@ -14,15 +14,14 @@ export default function ReceiveBTCModal(props) {
           <div className="modal-content">
             <div className="modal-body">
               <div className="card-body">
-                <h5 className="card-title text-center">Receive BTC.</h5>
-                <p className="card-text text-center">
-                  Copy and send this address to anyone who wants to send you
-                  BTC.
+                <h5 className="card-title">Receive BTC.</h5>
+                <p className="card-text">
+                  Send this address to anyone to receive bitcoin.
                 </p>
                 <form onSubmit={(e) => e}>
                   <div className="form-group mb-2">
                     <label className="form-label" for="email-address">
-                      BTC Wallet Address
+                      Wallet Address
                     </label>
                     <input
                       type="text"
