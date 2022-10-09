@@ -5,7 +5,7 @@ import BTCLogo from "./../../Assets/images/BTC.png";
 
 import { UserContext, UserProvider } from "./../../Context/auth.context";
 
-import TradeViewChart from 'react-crypto-chart';
+import TradeViewChart from "react-crypto-chart";
 
 function Home() {
   let navigate = useNavigate();
@@ -69,35 +69,27 @@ function Home() {
 
       </div> */}
 
-      <div class="d-flex align-items-center flex-column m-5">
-        <div class="d-flex justify-content-center">
+      <div class="">
+        <div class="">
           <div></div>
-          <div><h3>Bitcoin (BTC)</h3></div>
+          <div>
+            <h3>Bitcoin (BTC)</h3>
+          </div>
           <div></div>
-
         </div>
         <div class="mr-auto">US$19,176.65</div>
         <div>-$102.45(0.56)%</div>
-        <div class="graph mt-3">
-          {/* <div><h3>BTC/USDT</h3></div> */}
-        
-        <div className="parent">
         <TradeViewChart
-        containerStyle={{
-          minHeight: '300px',
-          minWidth: '400px',
-          marginBottom: '30px',
-        }}
-        pair="BTCUSDT"
-      />
-        </div>
-      
-      {/* <TradeViewChart 
-      class="w-75 h-50"
-      pair="BTCBUSD" />; */}
-        </div>
+          containerStyle={{
+            minWidth: "100%",
+            minHeight: "50vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          pair="BTCUSDT"
+        />
       </div>
-
     </>
   );
 }
