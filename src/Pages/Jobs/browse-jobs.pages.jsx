@@ -148,15 +148,15 @@ export default function BrowseJobs(props) {
 
   return (
     <>
-      <div className="text-left bg-light rounded-3">
-        <div className="container py-3 d-grid gap-2">
+      <div className="bg-light rounded-3 text-left">
+        <div className="d-grid container gap-2 py-3">
           <h1 className="display-4">
             Browse
             <span className="text-success"> Jobs</span>
           </h1>
 
           <div className="d-none d-md-block d-lg-block">
-            <div className="input-group mb-2 d-flex gap-3">
+            <div className="input-group d-flex mb-2 gap-3">
               <input
                 type="text"
                 className="form-control search-input text-center"
@@ -222,7 +222,7 @@ export default function BrowseJobs(props) {
         </div>
       </div>
 
-      <div className="container d-grid gap-5 py-5">
+      <div className="d-grid container gap-5 py-5">
         <div className="card">
           <div className="card-body">
             <h5 className="card-title">Filters</h5>
@@ -408,17 +408,17 @@ export default function BrowseJobs(props) {
         </div>
       </div>
 
-      <div className="p-3 bg-light rounded-3 text-center">
-        <div className="container py-3 d-grid gap-4">
+      <div className="bg-light rounded-3 p-3 text-center">
+        <div className="d-grid container gap-4 py-3">
           <h4 className="display-6">Popular Categories</h4>
           <div className="row g-4">
             <div className="col-12 col-md-6 col-lg-3">
               <div
-                className="p-4 bg-white text-center rounded-4 d-grid gap-4"
+                className="rounded-4 d-grid gap-4 bg-white p-4 text-center"
                 style={{ height: "200px" }}
               >
                 <i
-                  class="text-success fa-solid fa-code"
+                  className="text-success fa-solid fa-code"
                   style={{ fontSize: "100px" }}
                 ></i>
                 <h6 className="fw-bold">Developer</h6>
@@ -427,11 +427,11 @@ export default function BrowseJobs(props) {
 
             <div className="col-12 col-md-6 col-lg-3">
               <div
-                className="p-4 bg-white text-center rounded-4 d-grid gap-4"
+                className="rounded-4 d-grid gap-4 bg-white p-4 text-center"
                 style={{ height: "200px" }}
               >
                 <i
-                  class="text-success fa-light fa-dollar-sign"
+                  className="text-success fa-light fa-dollar-sign"
                   style={{ fontSize: "100px" }}
                 ></i>
                 <h6 className="fw-bold">Accounting & Finance</h6>
@@ -440,11 +440,11 @@ export default function BrowseJobs(props) {
 
             <div className="col-12 col-md-6 col-lg-3">
               <div
-                className="p-4 bg-white text-center rounded-4 d-grid gap-4"
+                className="rounded-4 d-grid gap-4 bg-white p-4 text-center"
                 style={{ height: "200px" }}
               >
                 <i
-                  class="text-success fa-solid fa-briefcase-medical"
+                  className="text-success fa-solid fa-briefcase-medical"
                   style={{ fontSize: "100px" }}
                 ></i>
                 <h6 className="fw-bold">Healthcare</h6>
@@ -453,11 +453,11 @@ export default function BrowseJobs(props) {
 
             <div className="col-12 col-md-6 col-lg-3">
               <div
-                className="p-4 bg-white text-center rounded-4 d-grid gap-4"
+                className="rounded-4 d-grid gap-4 bg-white p-4 text-center"
                 style={{ height: "200px" }}
               >
                 <i
-                  class="text-success fa-solid fa-bullhorn"
+                  className="text-success fa-solid fa-bullhorn"
                   style={{ fontSize: "100px" }}
                 ></i>
                 <h6 className="fw-bold">Sales & Marketing</h6>
@@ -468,7 +468,7 @@ export default function BrowseJobs(props) {
       </div>
 
       <div className="row" style={{ height: "40vh" }}>
-        <div className="bg-success col-6 p-5 d-flex justify-content-center align-items-center">
+        <div className="bg-success col-6 d-flex justify-content-center align-items-center p-5">
           <div>
             <h3 className="display-5 text-white">
               Put your best <br />

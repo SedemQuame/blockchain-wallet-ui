@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import ProjectLogo from "./../../Assets/images/logo.jpg";
-import UserContext from "../../Context/auth.context";
+// import { UserContext } from "./../../Context/auth.context";
 
 const NavBar = (props) => {
-  const { userId, setUserId } = useContext(UserContext);
+  // const { userId, setUserId } = useContext(UserContext);
 
   return (
     <>
@@ -34,25 +34,25 @@ const NavBar = (props) => {
 
             <ul className="navbar-nav me-auto mb-lg-0 mb-2">
               <li className="nav-item">
-                <Link classNameName="nav-link" to="/home">
+                <Link className="nav-link" to="/home">
                   Home
                 </Link>
               </li>
-              {userId ? (
+              {true ? (
                 <li className="nav-item">
-                  <Link classNameName="nav-link" to="/wallet-list">
+                  <Link className="nav-link" to="/wallet-list">
                     Wallets
                   </Link>
                 </li>
               ) : (
                 <>
                   <li className="nav-item">
-                    <Link classNameName="nav-link" to="/">
+                    <Link className="nav-link" to="/">
                       Sign up
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link classNameName="nav-link" to="/login">
+                    <Link className="nav-link" to="/login">
                       Login
                     </Link>
                   </li>

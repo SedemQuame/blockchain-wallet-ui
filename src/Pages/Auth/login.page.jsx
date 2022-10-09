@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../Context/auth.context";
+import LoadingModal from "../../Components/Transactions/loading-modal.component";
 
 function Login() {
+  let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loadingModalIsOpen, setLoadingModalIsOpen] = useState(false);
+
+  // use context
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // show loading modal
+    setLoadingModalIsOpen(true);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -16,6 +25,8 @@ function Login() {
       password: password,
     });
 
+    console.log(raw);
+
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -23,9 +34,19 @@ function Login() {
       redirect: "follow",
     };
 
-    fetch("https://btc-wallet-app.herokuapp.com/register", requestOptions)
+    fetch("https://btc-wallet-app.herokuapp.com/login", requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        console.log(result);
+        // store this in the user context
+        setUser(result);
+
+        // hide the modal
+        setLoadingModalIsOpen(false);
+
+        // navigate to /home
+        navigate(`/home`);
+      })
       .catch((error) => console.log("error", error));
   };
 
@@ -35,47 +56,54 @@ function Login() {
       style={{ height: "90vh" }}
     >
       <div className="col-12 col-md-8 col-lg-5">
-        <div class="card">
-          <div class="card-body">
+        <div className="card">
+          <div className="card-body">
             <h5 className="card-title text-center">Login</h5>
             <p className="card-text text-center">
               Enter your email address and password to login.
             </p>
             <form onSubmit={(e) => handleSubmit(e)}>
-              <div class="form-group mb-2">
-                <label class="form-label" for="email-address">
+              <div className="form-group mb-2">
+                <label className="form-label" for="email-address">
                   Email address
                 </label>
                 <input
                   type="email"
                   id="email-address"
-                  class="form-control"
+                  className="form-control"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <div class="form-group mb-2">
-                <label class="form-label" for="password">
+              <div className="form-group mb-2">
+                <label className="form-label" for="password">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
-                  class="form-control"
+                  className="form-control"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
-              <button type="submit" class="btn btn-primary btn-block">
+              <button
+                type="submit"
+                className="btn btn-primary btn-block"
+                data-mdb-toggle="modal"
+                data-mdb-target="#LoadingModal"
+              >
                 Login
               </button>
 
-              <div class="row mt-3">
-                <div class="col">
+              <LoadingModal isOpen={loadingModalIsOpen} text={"Logging into account."} />
+
+              <div className="row mt-3">
+                <div className="col">
                   <Link to="/">Signup</Link>
                 </div>
 
-                <div class="col text-end">
+                <div className="col text-end">
                   <Link to="/forgot-password">Forgot password?</Link>
                 </div>
               </div>

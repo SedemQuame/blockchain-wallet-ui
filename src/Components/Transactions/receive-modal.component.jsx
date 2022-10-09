@@ -1,40 +1,38 @@
 import React from "react";
 
-export default function ReceiveBTCModal() {
+export default function ReceiveBTCModal(props) {
   return (
     <>
       <div
-        class="modal fade"
+        className="modal"
         id="receiveBTCModal"
         tabindex="-1"
         aria-labelledby="receiveBTCModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="receiveBTCModalLabel">
-                Modal title
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-mdb-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">...</div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-mdb-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" class="btn btn-primary">
-                Save changes
-              </button>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body">
+              <div className="card-body">
+                <h5 className="card-title text-center">Receive BTC.</h5>
+                <p className="card-text text-center">
+                  Copy and send this address to anyone who wants to send you
+                  BTC.
+                </p>
+                <form onSubmit={(e) => e}>
+                  <div className="form-group mb-2">
+                    <label className="form-label" for="email-address">
+                      BTC Wallet Address
+                    </label>
+                    <input
+                      type="text"
+                      id="btc-user-btc-address"
+                      className="form-control"
+                      value={props.userAddress}
+                    />
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

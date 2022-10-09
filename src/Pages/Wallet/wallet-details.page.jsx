@@ -7,20 +7,23 @@ import Empty from "./../../Assets/images/empty.png";
 import { Link } from "react-router-dom";
 import SendBTCModal from "../../Components/Transactions/send-modal.component";
 import ReceiveBTCModal from "../../Components/Transactions/receive-modal.component";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 export default function WalletDetailsPage() {
   const { walletAddress } = useParams();
 
   const [data, setData] = useState();
-  const [load, setLoad] = useState(true);
 
   useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
-      network: "BTCTEST",
+      network: process.env.REACT_APP_NETWORK_TYPE || "BTCTEST",
       address: walletAddress,
     });
+
+    console.log(raw);
+
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -33,8 +36,8 @@ export default function WalletDetailsPage() {
     )
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         setData(result.data);
-        setLoad(true);
       })
       .catch((error) => console.log("error", error));
   }, []);
@@ -242,60 +245,66 @@ export default function WalletDetailsPage() {
               <div className="d-flex gap-3">
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   data-mdb-toggle="modal"
                   data-mdb-target="#sendBTCModal"
                 >
                   Send Crypto
                 </button>
-                <SendBTCModal userAddress={walletAddress} />
 
                 <button
                   type="button"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   data-mdb-toggle="modal"
                   data-mdb-target="#receiveBTCModal"
                 >
                   Receive Crypto
                 </button>
               </div>
+              <SendBTCModal userAddress={walletAddress} />
               <ReceiveBTCModal userAddress={walletAddress} />
             </div>
 
             <div className="card">
-              <h5 class="card-header bg-black text-white">Wallet</h5>
-              <div className="card-body p-0">
-                <table className="table-responsive table-sm table">
+              <h5 className="card-header bg-black text-white">Wallet</h5>
+              <div className="table-responsive">
+                <table className="table-striped table-sm table">
                   <tbody>
                     <tr>
                       <th>Address</th>
-                      <td className="text-wrap text-right">
+                      <td className="text-muted text-wrap text-right">
                         {data && data.address}
                       </td>
                     </tr>
                     <tr>
                       <th>Network</th>
-                      <td className="text-right">{data && data.network}</td>
+                      <td className="text-muted text-right">
+                        {data && data.network}
+                      </td>
                     </tr>
                     <tr>
                       <th>Balance</th>
-                      <td className="text-right">{data && data.balance}</td>
+                      <td className="text-muted text-right">
+                        {data && data.balance}
+                      </td>
                     </tr>
                     <tr>
                       <th>Pending</th>
-                      <td className="text-right">
+                      <td className="text-muted text-right">
                         {data && data.received_value}
                       </td>
                     </tr>
                     <tr>
                       <th>Received</th>
-                      <td className="text-right">
+                      <td className="text-muted text-right">
                         {data && data.pending_value}
                       </td>
                     </tr>
                     <tr>
                       <th>Number of Transactions</th>
-                      <td className="text-right">{data && data.total_txs}</td>
+                      <td className="text-muted text-right">
+                        {data && data.total_txs}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -303,34 +312,35 @@ export default function WalletDetailsPage() {
             </div>
 
             <div className="card">
-              <div className="card">
-                <h5 class="card-header bg-black text-white">Transactions</h5>
-                <div className="card-body p-0"></div>
-                <table className="mb-0 table bg-white align-middle">
-                  <tbody>
-                    {txs.map((txs) => (
-                      <tr>
-                        <td>
-                          <Link
-                            to={{
-                              pathname: `https://sochain.com/tx/BTCTEST/${txs.txid}`,
-                            }}
-                          >
-                            {txs.txid}
-                          </Link>
-                        </td>
-                        <td>{txs.block_no}</td>
-                        <td>{txs.confirmations}</td>
-                        <td>
-                          <span className="badge badge-success rounded-pill d-inline">
-                            Active
-                          </span>
-                        </td>
-                        <td>{txs.time}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <h5 className="card-header bg-black text-white">Transactions</h5>
+              <div className="card-body p-0">
+                <div className="table-responsive">
+                  <table className="mb-0 table bg-white align-middle">
+                    <tbody>
+                      {txs.map((txs) => (
+                        <tr>
+                          <td>
+                            <Link
+                              to={{
+                                pathname: `https://sochain.com/tx/BTCTEST/${txs.txid}`,
+                              }}
+                            >
+                              {txs.txid}
+                            </Link>
+                          </td>
+                          <td>{txs.block_no}</td>
+                          <td>{txs.confirmations}</td>
+                          <td>
+                            <span className="badge badge-success rounded-pill d-inline">
+                              Active
+                            </span>
+                          </td>
+                          <td>{txs.time}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -345,8 +355,8 @@ export default function WalletDetailsPage() {
                 alt="empty-wallet-list"
                 style={{ width: "100px", height: "100px" }}
               />
-              <h5 className="card-title">Error.</h5>
-              <p className="card-text">Unable to find wallet details.</p>
+              <h5 className="card-title">Loading.</h5>
+              <p className="card-text">Looking for wallet details.</p>
             </div>
           </div>
         )}

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "./../../Context/auth.context";
+import LoadingModal from "../../Components/Transactions/loading-modal.component";
 
 function Signup() {
   let navigate = useNavigate();
@@ -8,9 +10,12 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [loadingModalIsOpen, setLoadingModalIsOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // show loading modal
+    setLoadingModalIsOpen(true);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -34,7 +39,13 @@ function Signup() {
     fetch("https://btc-wallet-app.herokuapp.com/register", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        navigate(`/home`);
+        // save to the context.
+        // alert("Account created successfully. Please proceed to login");
+
+        // hide the modal
+        setLoadingModalIsOpen(false);
+
+        navigate(`/login`);
       })
       .catch((error) => console.log("error", error));
   };
@@ -46,71 +57,76 @@ function Signup() {
         style={{ height: "90vh" }}
       >
         <div className="col-12 col-md-6 col-lg-4 ">
-          <div class="card">
-            <div class="card-body">
+          <div className="card">
+            <div className="card-body">
               <form onSubmit={(e) => handleSubmit(e)}>
                 <h5 className="card-title text-center">Signup</h5>
                 <p className="card-text text-center">
                   Enter your details to signup.
                 </p>
-                <div class="form-group mb-2">
-                  <label class="form-label" for="name">
+                <div className="form-group mb-2">
+                  <label className="form-label" for="name">
                     Name
                   </label>
                   <input
                     type="text"
                     id="name"
-                    class="form-control"
+                    className="form-control"
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
-                <div class="form-group mb-2">
-                  <label class="form-label" for="email-address">
+                <div className="form-group mb-2">
+                  <label className="form-label" for="email-address">
                     Email address
                   </label>
                   <input
                     type="email"
                     id="email-address"
-                    class="form-control"
+                    className="form-control"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
-                <div class="form-group mb-2">
-                  <label class="form-label" for="phone-number">
+                <div className="form-group mb-2">
+                  <label className="form-label" for="phone-number">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     id="phone-number"
-                    class="form-control"
+                    className="form-control"
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
 
-                <div class="form-group mb-2">
-                  <label class="form-label" for="password">
+                <div className="form-group mb-2">
+                  <label className="form-label" for="password">
                     Password
                   </label>
                   <input
                     type="password"
                     id="password"
-                    class="form-control"
+                    className="form-control"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" className="btn btn-primary btn-block">
                   Sign Up
                 </button>
 
-                <div class="row mt-3">
-                  <div class="col">
+                <LoadingModal
+                  isOpen={loadingModalIsOpen}
+                  text={"Creating an account."}
+                />
+
+                <div className="row mt-3">
+                  <div className="col">
                     <Link to="/login">Login</Link>
                   </div>
 
-                  <div class="col text-end">
+                  <div className="col text-end">
                     <Link to="/forgot-password">Forgot password?</Link>
                   </div>
                 </div>

@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BTCLogo from "./../../Assets/images/BTC.png";
 import Success from "./../../Assets/images/check.png";
 import Failed from "./../../Assets/images/failed.png";
 import Empty from "./../../Assets/images/empty.png";
+import { UserContext } from "../../Context/auth.context";
+import LoadingModal from "../../Components/Transactions/loading-modal.component";
+import moment from "moment";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 export default function WalletListPage() {
   let navigate = useNavigate();
@@ -13,8 +17,13 @@ export default function WalletListPage() {
   const [walletCreationSuccess, setWalletCreationSuccess] = useState(false);
   const [walletCreationInitiated, setWalletCreationInitiated] = useState(false);
   const [hasWalletData, setHasWalletData] = useState(false);
+  const [loadingModalIsOpen, setLoadingModalIsOpen] = useState(false);
+  const [openCreateWalletModal, setOpenCreateWalletModal] = useState(false);
 
-  const user_id = `63418f54788cd04674ea279f`;
+  // use context
+  const { user } = useContext(UserContext);
+  let user_id = user.user.userId;
+  let bearer_token = user.token;
 
   useEffect(() => {
     var requestOptions = {
@@ -38,13 +47,11 @@ export default function WalletListPage() {
 
   const createWallet = (e) => {
     e.preventDefault();
-    setWalletCreationInitiated(true);
+    // show loading modal
+    setLoadingModalIsOpen(true);
 
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM0MTU2YjgxNGU1ODQwMDE2ZWJkZWRkIiwiZW1haWwiOiJzZWRlbXF1YW1lYUBnbWFpbC5jb20iLCJuYW1lIjoic2VkZW0gdGVzdHVzZXIiLCJpYXQiOjE2NjUyMjY1NDcsImV4cCI6MTY2NTgzMTM0N30.YJ-txgnfXKoM5KLvZe0fMdcaaiLZ9ZCr8QyKPGv3CPI"
-    );
+    myHeaders.append(`Authorization`, `Bearer ${bearer_token}`);
 
     var raw = JSON.stringify({
       name: walletName,
@@ -66,24 +73,33 @@ export default function WalletListPage() {
     )
       .then((response) => response.json())
       .then((result) => {
-        setWalletCreationSuccess(result.success);
+        // hide the modal
+        setLoadingModalIsOpen(false);
+        // setWalletCreationSuccess(result.success);
       })
       .catch((error) => console.log("error", error));
   };
 
   return (
     <>
-      <div className="container-fluid">
+      <div className="container-fluid d-grid gap-3">
+        <div className="mt-3">
+          <h5 className="card-title text-center">My Wallets</h5>
+          <p className="card-text text-center">
+            Create and manage multiple BTC wallets from one dashboard.
+          </p>
+        </div>
+
         <div className="card mt-3">
           <h5 className="card-header bg-black text-white">
-            BTC Wallets
+            Wallets
             {wallets && wallets.length > 0 ? (
               <button
                 type="button"
                 className="btn btn-primary float-end"
                 data-mdb-toggle="modal"
                 data-mdb-target="#createWalletModal"
-                onClick={() => setWalletCreationInitiated(false)}
+                onClick={() => setOpenCreateWalletModal(true)}
               >
                 Create Wallet
               </button>
@@ -97,11 +113,12 @@ export default function WalletListPage() {
                     {wallets &&
                       wallets.map((wallet) => (
                         <tr
+                          className="p-0"
                           onClick={() => {
                             navigate(`/wallet-details/${wallet.address}`);
                           }}
                         >
-                          <td>
+                          <td className="p-1">
                             <div className="d-flex align-items-center">
                               <img
                                 src={BTCLogo}
@@ -109,15 +126,23 @@ export default function WalletListPage() {
                                 style={{ width: "45px", height: "45px" }}
                                 className="rounded-circle"
                               />
-                              <div className="ms-3">
-                                <p className="fw-bold mb-1">{wallet.address}</p>
-                                {/* <p className="text-muted mb-0">
-                                  john.doe@gmail.com
-                                </p> */}
+                              <div className="p-1">
+                                <p className="fw-bold mb-1">{wallet.name}</p>
+                                <p
+                                  className="text-muted text-wrap mb-0"
+                                  style={{ fontSize: "10px" }}
+                                >
+                                  {wallet.address}
+                                </p>
                               </div>
                             </div>
                           </td>
-                          <td className="text-end">Date</td>
+                          <td className="text-muted p-2 text-end">
+                            {moment(
+                              wallet.createdAt,
+                              "YYYYMMDDHHmmss"
+                            ).fromNow()}
+                          </td>
                         </tr>
                       ))}
                   </tbody>
@@ -145,7 +170,7 @@ export default function WalletListPage() {
                     className="btn btn-primary"
                     data-mdb-toggle="modal"
                     data-mdb-target="#createWalletModal"
-                    onClick={() => setWalletCreationInitiated(false)}
+                    onClick={() => setOpenCreateWalletModal(true)}
                   >
                     Create Wallet
                   </button>
@@ -158,73 +183,70 @@ export default function WalletListPage() {
 
       {/*Create modal */}
 
-      <div
-        className="modal fade"
-        id="createWalletModal"
-        tabindex="-1"
-        aria-labelledby="createWalletModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-body">
-              {/* Show progress loading here */}
-              {walletCreationInitiated === false ? (
-                <form onSubmit={(e) => createWallet(e)}>
-                  <h5 className="card-title text-center">Create Wallet.</h5>
-                  <p className="card-text text-center">
-                    State a name for the wallet you want to create.
-                  </p>
+      <Modal isOpen={openCreateWalletModal}>
+        <ModalBody>
+          {/* Show progress loading here */}
 
-                  <div className="form-group mb-2">
-                    <label className="form-label" for="email-address">
-                      Wallet Name
-                    </label>
-                    <input
-                      type="text"
-                      id="wallet-name"
-                      className="form-control"
-                      onChange={(e) => setWalletName(e.target.value)}
-                    />
-                  </div>
+          <form onSubmit={(e) => createWallet(e)}>
+            <h5 className="card-title text-center">Create Wallet.</h5>
+            <p className="card-text text-center">
+              State a name for the wallet you want to create.
+            </p>
 
-                  <div className="form-group mb-2">
-                    <label className="form-label" for="password">
-                      Wallet Type
-                    </label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      id="wallet-type"
-                      onChange={(e) => setWalletType(e.target.value)}
-                    >
-                      <option selected>Select menu</option>
-                      <option value="BTC">BTC</option>
-                    </select>
-                  </div>
-
-                  <button type="submit" className="btn btn-primary btn-block">
-                    Create Wallet
-                  </button>
-                </form>
-              ) : (
-                <div className="text-center">
-                  <img
-                    src={walletCreationSuccess ? Success : Failed}
-                    alt=""
-                    style={{ width: "45px", height: "45px" }}
-                  />
-                  <br />
-                  <p>
-                    Wallet creation{" "}
-                    {walletCreationSuccess ? "succeeded" : "failed"}
-                  </p>
-                </div>
-              )}
+            <div className="form-group mb-2">
+              <label className="form-label" for="email-address">
+                Wallet Name
+              </label>
+              <input
+                type="text"
+                id="wallet-name"
+                className="form-control"
+                onChange={(e) => setWalletName(e.target.value)}
+              />
             </div>
-          </div>
-        </div>
-      </div>
+
+            <div className="form-group mb-2">
+              <label className="form-label" for="password">
+                Wallet Type
+              </label>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                id="wallet-type"
+                onChange={(e) => setWalletType(e.target.value)}
+              >
+                <option selected>Select menu</option>
+                <option value="BTC">BTC</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              onClick={() => setOpenCreateWalletModal(false)}
+            >
+              Create Wallet
+            </button>
+
+            <LoadingModal
+              isOpen={loadingModalIsOpen}
+              text={"Creating a BTC wallet."}
+            />
+          </form>
+        </ModalBody>
+      </Modal>
     </>
   );
+}
+
+{
+  /* <div className="text-center">
+  <img
+    src={walletCreationSuccess ? Success : Failed}
+    alt=""
+    style={{ width: "45px", height: "45px" }}
+  />
+  <br />
+  <p>Wallet creation {walletCreationSuccess ? "succeeded" : "failed"}</p>
+</div>; */
 }

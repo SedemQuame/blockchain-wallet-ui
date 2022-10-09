@@ -35,32 +35,32 @@ function ForgotPassword() {
       style={{ height: "90vh" }}
     >
       <div className="col-12 col-md-8 col-lg-5">
-        <div class="card">
-          <div class="card-body">
+        <div className="card">
+          <div className="card-body">
             <h5 className="card-title text-center">Forgot Password</h5>
             <p className="card-text text-center">Enter your email address.</p>
             <form onSubmit={(e) => handleSubmit(e)}>
-              <div class="form-group mb-2">
-                <label class="form-label" for="email-address">
+              <div className="form-group mb-2">
+                <label className="form-label" for="email-address">
                   Email address
                 </label>
                 <input
                   type="email"
                   id="email-address"
-                  class="form-control"
+                  className="form-control"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <button type="submit" class="btn btn-primary btn-block">
+              <button type="submit" className="btn btn-primary btn-block">
                 Request Password Reset
               </button>
 
-              <div class="row mt-3">
-                <div class="col">
+              <div className="row mt-3">
+                <div className="col">
                   <Link to="/login">Login</Link>
                 </div>
 
-                <div class="col text-end">
+                <div className="col text-end">
                   <Link to="/signup">Signup</Link>
                 </div>
               </div>
