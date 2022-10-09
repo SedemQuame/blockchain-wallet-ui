@@ -72,14 +72,15 @@ function Home() {
       <div class="d-flex align-items-center flex-column m-5">
         <div class="d-flex justify-content-center">
           <div></div>
-          <div>Bitcoin (BTC)</div>
+          <div><h3>Bitcoin (BTC)</h3></div>
           <div></div>
 
         </div>
         <div class="mr-auto">US$19,176.65</div>
         <div>-$102.45(0.56)%</div>
         <div class="graph mt-3">
-        <h3>BTC/USDT</h3>
+          {/* <div><h3>BTC/USDT</h3></div> */}
+        
         <div className="parent">
         <TradeViewChart
         containerStyle={{
