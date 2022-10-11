@@ -52,18 +52,15 @@ export default function WalletListPage() {
 
   const createWallet = (e) => {
     e.preventDefault();
-    // show loading modal
-    setLoadingModalIsOpen(true);
 
     var myHeaders = new Headers();
-    myHeaders.append(`Authorization`, `Bearer ${bearer_token}`);
+    myHeaders.append("Authorization", `Bearer ${bearer_token}`);
+    myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
       name: walletName,
       type: walletType,
     });
-
-    console.log(raw);
 
     var requestOptions = {
       method: "POST",
@@ -78,9 +75,7 @@ export default function WalletListPage() {
     )
       .then((response) => response.json())
       .then((result) => {
-        // hide the modal
-        setLoadingModalIsOpen(false);
-
+        console.log(result);
         if (result === "Unauthorized") {
           alert("Unauthorized");
           // has wallet data

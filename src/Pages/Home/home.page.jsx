@@ -1,10 +1,35 @@
+import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BTCLogo from "./../../Assets/images/BTC.png";
-import { UserContext } from "./../../Context/auth.context";
 import TradeViewChart from "react-crypto-chart";
+import { UserContext } from "../../Context/auth.context";
 
 function Home() {
   let navigate = useNavigate();
+  const [totalBTCBalance, setTotalBTCBalance] = useState();
+
+  // use context
+  const { user } = useContext(UserContext);
+  let user_id = user.user.userId;
+
+  useEffect(() => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://btc-wallet-app.herokuapp.com/users/${user_id}/total-bitcoin-ballance`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          setTotalBTCBalance(result.totalBitcoinBalance);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  });
 
   return (
     <>
@@ -47,8 +72,10 @@ function Home() {
                   <div className="ms-3">
                     <p className="fw-bold mb-1"> </p>
                   </div>
-                  <h5 className="card-title">Bitcoin (BTC)</h5>
-                  <p className="card-text">$0.00</p>
+                  <h5 className="card-title">Bitcoin</h5>
+                  <p className="card-text">
+                    Total ~ <b>{totalBTCBalance || 0.0}</b>
+                  </p>
                   <button
                     href="#"
                     className="btn btn-primary"

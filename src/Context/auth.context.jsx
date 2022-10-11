@@ -2,7 +2,9 @@ import React, { useState, useMemo, createContext, useEffect } from "react";
 
 const UserContext = createContext({
   user: "",
+  email: "",
   setUser: () => {},
+  setEmailForPassword: () => {},
 });
 
 function setLocalStorage(key, value) {
@@ -25,12 +27,17 @@ function getLocalStorage(key, initialValue) {
 }
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(() => getLocalStorage("user", {}));
+  const [user, setUser] = useState(() => getLocalStorage("user", null));
+  const [email, setEmailForPassword] = useState();
+
   useEffect(() => {
     setLocalStorage("user", user);
   }, [user]);
 
-  const value = useMemo(() => ({ user, setUser }), [user]);
+  const value = useMemo(
+    () => ({ user, setUser, email, setEmailForPassword }),
+    [user, email]
+  );
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 

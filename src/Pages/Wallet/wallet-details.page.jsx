@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Success from "./../../Assets/images/check.png";
 import Failed from "./../../Assets/images/failed.png";
@@ -7,6 +6,7 @@ import Empty from "./../../Assets/images/empty.png";
 import { Link } from "react-router-dom";
 import SendBTCModal from "../../Components/Transactions/send-modal.component";
 import ReceiveBTCModal from "../../Components/Transactions/receive-modal.component";
+import moment from "moment";
 import StatusOfBTCTransactionModal from "../../Components/Transactions/state-modal.component";
 
 function WalletAttributes(props) {
@@ -51,7 +51,7 @@ export default function WalletDetailsPage() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.data.txs);
+        console.log(result.data);
         setData(result.data);
       })
       .catch((error) => console.log("error", error));
@@ -77,6 +77,12 @@ export default function WalletDetailsPage() {
               <ul className="list-group">
                 <li className="list-group-item p-2">
                   <WalletAttributes
+                    attribute="Wallet Name"
+                    value={data && data.walletName}
+                  />
+                </li>
+                <li className="list-group-item p-2">
+                  <WalletAttributes
                     attribute="Address"
                     value={data && data.address}
                   />
@@ -90,13 +96,13 @@ export default function WalletDetailsPage() {
                 <li className="list-group-item p-2">
                   <WalletAttributes
                     attribute="Pending"
-                    value={data && data.received_value}
+                    value={`${data && data.pending_value} BTC`}
                   />
                 </li>
                 <li className="list-group-item p-2">
                   <WalletAttributes
                     attribute="Received"
-                    value={data && data.received_value}
+                    value={`${data && data.received_value} BTC`}
                   />
                 </li>
                 <li className="list-group-item p-2">
@@ -158,7 +164,9 @@ export default function WalletDetailsPage() {
                             <li className="list-group-item p-2">
                               <WalletAttributes
                                 attribute="Time"
-                                value={txs.time}
+                                value={moment(txs.time * 1000).format(
+                                  "DD MMM YYYY"
+                                )}
                               />
                             </li>
                             <li className="list-group-item p-2">

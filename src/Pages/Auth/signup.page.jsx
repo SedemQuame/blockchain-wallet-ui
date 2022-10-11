@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "./../../Context/auth.context";
 import LoadingModal from "../../Components/Transactions/loading-modal.component";
 
 function Signup() {
@@ -39,9 +38,10 @@ function Signup() {
     fetch(`https://btc-wallet-app.herokuapp.com/register`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
 
-        if (result.length === 3) {
-          alert(result[1].message);
+        if ("errors" in result) {
+          alert(result.errors.number);
         } else {
           if (result.success) {
             // hide the modal
@@ -51,6 +51,7 @@ function Signup() {
             alert(result.message);
           }
         }
+
         setLoadingModalIsOpen(false);
         return;
       })
