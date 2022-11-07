@@ -8,6 +8,7 @@ import SendBTCModal from "../../Components/Transactions/send-modal.component";
 import ReceiveBTCModal from "../../Components/Transactions/receive-modal.component";
 import moment from "moment";
 import StatusOfBTCTransactionModal from "../../Components/Transactions/state-modal.component";
+import BuyBTCModal from "../../Components/Transactions/buy-model.component";
 
 function WalletAttributes(props) {
   return (
@@ -27,7 +28,9 @@ export default function WalletDetailsPage() {
   const { walletAddress } = useParams();
   const [data, setData] = useState();
   const [openSendBtcModal, setOpenSendBtcModal] = useState(false);
+  const [openBuyBtcModal, setOpenBuyBtcModal] = useState(false);
   const [transactionState, setTransactionStateData] = useState();
+  const [buyModalState, setBuyModalState] = useState(0);
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -136,6 +139,17 @@ export default function WalletDetailsPage() {
                   <button
                     type="button"
                     className="btn btn-primary"
+                    onClick={() => {
+                      setOpenBuyBtcModal(true);
+                      setBuyModalState(0);
+                    }}
+                  >
+                    Buy BTC
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary"
                     data-mdb-toggle="modal"
                     data-mdb-target="#receiveBTCModal"
                   >
@@ -235,6 +249,15 @@ export default function WalletDetailsPage() {
         setTransactionStateData={setTransactionStateData}
         userAddress={walletAddress}
         privateKey={``}
+      />
+      <BuyBTCModal
+        openBuyBtcModal={openBuyBtcModal}
+        setOpenBuyBtcModal={setOpenBuyBtcModal}
+        setTransactionStateData={setTransactionStateData}
+        userAddress={walletAddress}
+        privateKey={``}
+        buyModalState={buyModalState}
+        setBuyModalState={setBuyModalState}
       />
       <ReceiveBTCModal userAddress={walletAddress} />
       {/* <StatusOfBTCTransactionModal transactionState={transactionState} /> */}

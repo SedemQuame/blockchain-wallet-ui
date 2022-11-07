@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import BTCLogo from "./../../Assets/images/BTC.png";
-import Success from "./../../Assets/images/check.png";
-import Failed from "./../../Assets/images/failed.png";
 import Empty from "./../../Assets/images/empty.png";
 import { UserContext } from "../../Context/auth.context";
 import LoadingModal from "../../Components/Transactions/loading-modal.component";
